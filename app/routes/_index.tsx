@@ -7,5 +7,5 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
     const { user } = useAuthorize();
-    return <h1>Welcome to Gommerce, {user?.displayName || "Guest"}</h1>;
+    return <h1>Welcome to Gommerce, {user?.attributes["profile.display_name"] || "Guest"}</h1>;
 }

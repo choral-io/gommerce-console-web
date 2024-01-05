@@ -45,7 +45,7 @@ export default function Frame(props: { context?: unknown }) {
                     <div id="user-dropdown" className={clsx("dropdown dropdown-end", { hidden: !user })}>
                         <div tabIndex={0} role="button" className="btn btn-ghost">
                             <IconUser size="1em" />
-                            {user?.displayName ?? "Anonymous"}
+                            {user?.attributes["profile.display_name"] ?? "Anonymous"}
                             <IconChevronDown size="1em" />
                         </div>
                         <ul
