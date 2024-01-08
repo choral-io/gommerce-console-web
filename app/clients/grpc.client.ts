@@ -41,15 +41,25 @@ export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
         headers: { "Content-Type": "application/json" },
         signal: rs,
     });
-    const encoder = new TextDecoder("utf-8");
+    const decoder = new TextDecoder("utf-8");
     const reader = resp.body?.getReader();
+    let buffer = "";
     while (reader) {
         try {
             const { done, value } = await reader.read();
+            if (value && value.length > 0) {
+                buffer += decoder.decode(value);
+            }
+            if (buffer.length > 0) {
+                const chunks = buffer.split(/\r?\n/);
+                buffer = chunks.pop() || "";
+                for (const chunk of chunks) {
+                    yield mt.fromJsonString(chunk);
+                }
+            }
             if (done) {
                 break;
             }
-            yield mt.fromJsonString(encoder.decode(value));
         } catch (err) {
             if (err instanceof DOMException && err.name === "AbortError") {
                 break;
