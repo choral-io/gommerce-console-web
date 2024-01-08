@@ -35,17 +35,17 @@ export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
     mn: string,
     rs: AbortSignal | null = null,
 ): AsyncGenerator<O> {
-    const resp = await fetch(`${window.env.GOMMERCE_GRPC_ENDPOINT}/${sn}/${mn}`, {
-        method: "POST",
-        body: req.toJsonString(),
-        headers: { "Content-Type": "application/json" },
-        signal: rs,
-    });
-    const decoder = new TextDecoder("utf-8");
-    const reader = resp.body?.getReader();
-    let buffer = "";
-    while (reader) {
-        try {
+    try {
+        const resp = await fetch(`${window.env.GOMMERCE_GRPC_ENDPOINT}/${sn}/${mn}`, {
+            method: "POST",
+            body: req.toJsonString(),
+            headers: { "Content-Type": "application/json" },
+            signal: rs,
+        });
+        const decoder = new TextDecoder("utf-8");
+        const reader = resp.body?.getReader();
+        let buffer = "";
+        while (reader) {
             const { done, value } = await reader.read();
             if (value && value.length > 0) {
                 buffer += decoder.decode(value);
@@ -54,17 +54,17 @@ export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
                 const chunks = buffer.split(/\r?\n/);
                 buffer = chunks.pop() || "";
                 for (const chunk of chunks) {
-                    yield mt.fromJsonString(chunk);
+                    yield mt.fromJson(JSON.parse(chunk).result);
                 }
             }
             if (done) {
                 break;
             }
-        } catch (err) {
-            if (err instanceof DOMException && err.name === "AbortError") {
-                break;
-            }
-            throw err;
         }
+    } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") {
+            return;
+        }
+        throw err;
     }
 }
