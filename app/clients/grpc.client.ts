@@ -48,7 +48,7 @@ export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
         while (reader) {
             const { done, value } = await reader.read();
             if (value && value.length > 0) {
-                buffer += decoder.decode(value);
+                buffer += decoder.decode(value, { stream: true });
             }
             if (buffer.length > 0) {
                 const chunks = buffer.split(/\r?\n/);
