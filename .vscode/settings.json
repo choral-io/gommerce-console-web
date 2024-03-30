@@ -8,8 +8,7 @@
     "**/Thumbs.db": true,
     "node_modules": true,
     ".cache": true,
-    "build": true,
-    "public/build": true
+    "build": true
   },
   "files.associations": {
     "*.css": "tailwindcss",

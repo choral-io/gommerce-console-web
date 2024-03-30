@@ -32,18 +32,18 @@ export default function Frame(props: { context?: unknown }) {
         <>
             <div className="navbar sticky top-0 border-b border-base-content/5 bg-base-100 bg-opacity-75 backdrop-blur">
                 <div className="navbar-start">
-                    <Link to="/" className="btn btn-ghost text-xl">
+                    <Link to="/" className="btn btn-ghost no-animation text-xl">
                         <span className="uppercase">Gommerce</span>
                     </Link>
                 </div>
                 <div className="navbar-center"></div>
                 <div className="navbar-end">
-                    <NavLink to={"/login"} className={clsx("btn btn-ghost", { hidden: !!user })}>
+                    <NavLink to={"/login"} className={clsx("btn btn-ghost no-animation", { hidden: !!user })}>
                         <IconLogin size="1em" />
                         Login
                     </NavLink>
                     <div id="user-dropdown" className={clsx("dropdown dropdown-end", { hidden: !user })}>
-                        <div tabIndex={0} role="button" className="btn btn-ghost">
+                        <div tabIndex={0} role="button" className="btn btn-ghost no-animation">
                             <IconUser size="1em" />
                             {user?.attributes["profile.display_name"] ?? "Anonymous"}
                             <IconChevronDown size="1em" />

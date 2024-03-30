@@ -47,6 +47,7 @@ export default function Index() {
                                 "input-error": !!actionData?.fieldErrors.username,
                             })}
                             placeholder="Username"
+                            autoComplete="username"
                         />
                     </label>
                     <ul className="list-inside list-disc text-error">
@@ -66,6 +67,7 @@ export default function Index() {
                                 "input-error": !!actionData?.fieldErrors.password,
                             })}
                             placeholder="Password"
+                            autoComplete="current-password"
                         />
                     </label>
                     <ul className="list-inside list-disc text-error">
