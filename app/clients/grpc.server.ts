@@ -9,17 +9,10 @@ import { StateStoreService } from "@proto/state/v1beta/store_connect";
 
 invariant(process.env.GOMMERCE_GRPC_ENDPOINT, "environment variable GOMMERCE_GRPC_ENDPOINT is required.");
 
-declare global {
-    namespace NodeJS {
-        interface ProcessEnv {
-            GOMMERCE_GRPC_ENDPOINT: string;
-        }
-    }
-}
-
+export const endpoint = process.env.GOMMERCE_GRPC_ENDPOINT;
 export const transport = singleton("grpc_transport", () => {
     return createGrpcTransport({
-        baseUrl: process.env.GOMMERCE_GRPC_ENDPOINT,
+        baseUrl: endpoint,
         useBinaryFormat: true,
         httpVersion: "2",
         interceptors: [],

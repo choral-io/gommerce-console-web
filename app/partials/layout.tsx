@@ -49,6 +49,7 @@ export default function Frame(props: { context?: unknown }) {
                             <IconChevronDown size="1em" />
                         </div>
                         <ul
+                            // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                             tabIndex={0}
                             className="menu dropdown-content w-52 rounded-box border border-base-content/5 bg-base-100 bg-opacity-95 shadow-2xl"
                         >
@@ -62,7 +63,11 @@ export default function Frame(props: { context?: unknown }) {
                                 <Form action="/logout" method="post" className="hidden">
                                     <input id="navbar-logout-submit" type="submit" />
                                 </Form>
-                                <label htmlFor="navbar-logout-submit" role="button">
+                                <label
+                                    htmlFor="navbar-logout-submit"
+                                    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+                                    role="button"
+                                >
                                     <IconLogout size="1em" />
                                     Logout
                                 </label>

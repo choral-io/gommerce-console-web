@@ -6,10 +6,12 @@ import { BadRequest } from "@proto/rpc/error_details_pb";
 type validateError<T> = {
     formErrors: string[];
     fieldErrors: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [P in T extends any ? keyof T : never]?: string[];
     };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseError<F = any>(error: ZodError<F> | ConnectError): validateError<F> | null {
     if (error instanceof ZodError) {
         return error.flatten<string>();
@@ -19,6 +21,7 @@ export function parseError<F = any>(error: ZodError<F> | ConnectError): validate
         const br = error.findDetails(BadRequest);
         if (br && br.length > 0) {
             return br[0].fieldViolations.reduce((acc, cur) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const field = cur.field as F extends any ? keyof F : never;
                 if (field) {
                     acc.fieldErrors[field] ??= [];

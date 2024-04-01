@@ -66,7 +66,7 @@ export const LoginForm = z.object({
 
 export type LoginFormType = z.infer<typeof LoginForm>;
 
-export async function login(request: Request, redirectTo: string = "/") {
+export async function login(request: Request, redirectTo = "/") {
     const formData = await request.formData();
     const { username, password } = LoginForm.parse(Object.fromEntries(formData));
     const { accessToken, refreshToken, expiresIn } = await tokens.createToken(
@@ -90,7 +90,7 @@ export async function login(request: Request, redirectTo: string = "/") {
     return redirect(redirectTo, { headers });
 }
 
-export async function logout(request: Request, redirectTo: string = "/") {
+export async function logout(request: Request, redirectTo = "/") {
     const session = await getSession(request.headers.get("Cookie"));
     session.unset("refresh_token");
     const headers = new Headers();
