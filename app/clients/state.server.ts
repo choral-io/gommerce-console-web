@@ -1,6 +1,7 @@
 import type { SessionData, SessionStorage, SessionIdStorageStrategy } from "@remix-run/node";
 import { createSessionStorage } from "@remix-run/node";
-import { stateStoreServiceClient as stateStore, snowflakeServiceClient as snowflake } from "~/clients/grpc.server";
+import { stateStoreServiceClient as stateStore } from "~/clients/grpc.server";
+import { v4 as uuidv4 } from "uuid";
 
 interface CookieSessionStorageOptions {
     bucket?: string;
@@ -17,7 +18,7 @@ export function createStateSessionStorage<Data = SessionData, FlashData = Data>(
         const key = `${bucket}:${id}`;
         const metadata: { [key: string]: string } = {};
         if (expires) {
-            metadata["ttlInSeconds"] = (expires.getTime() - Date.now()).toString(10);
+            metadata["ttlInSeconds"] = Math.floor((expires.getTime() - Date.now()) / 1000).toString(10);
         }
         await stateStore.setState(
             {
@@ -32,7 +33,7 @@ export function createStateSessionStorage<Data = SessionData, FlashData = Data>(
     return createSessionStorage<Data, FlashData>({
         cookie: options?.cookie,
         async createData(data, expires) {
-            const { value: id } = await snowflake.nextHex({});
+            const id = uuidv4();
             await upsert(id, JSON.stringify(data || null), expires);
             return id;
         },

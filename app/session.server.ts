@@ -7,7 +7,7 @@ export const { getSession, commitSession, destroySession } = createStateSessionS
     cookie: {
         name: "__state__",
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 7, // 7 days
+        maxAge: parseInt(process.env.REMIX_COOKIE_MAXAGE ?? "604800"), // default to 7 days
         path: "/",
         sameSite: "lax",
         secrets: [process.env.REMIX_COOKIE_SECRET],

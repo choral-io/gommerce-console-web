@@ -1,14 +1,6 @@
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { cssBundleHref } from "@remix-run/css-bundle";
-import {
-    Links,
-    Meta,
-    Scripts,
-    ScrollRestoration,
-    isRouteErrorResponse,
-    useLoaderData,
-    useRouteError,
-} from "@remix-run/react";
+import { Links, Meta, Scripts, ScrollRestoration, isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { authorize } from "~/secure.server";
 import Outlet from "~/partials/layout";
 import styles from "~/styles/global.css?url";
@@ -23,7 +15,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return {
         user: identity?.user,
         scope: identity?.scope,
-        env: { GOMMERCE_GRPC_ENDPOINT: process.env.GOMMERCE_GRPC_ENDPOINT },
     };
 }
 
@@ -46,13 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    const { env } = useLoaderData<typeof loader>();
-    return (
-        <>
-            <Outlet />
-            <script dangerouslySetInnerHTML={{ __html: `window.env = ${JSON.stringify(env)};` }} />
-        </>
-    );
+    return <Outlet />;
 }
 
 export function ErrorBoundary() {

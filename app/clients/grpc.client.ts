@@ -1,16 +1,7 @@
 import invariant from "tiny-invariant";
 import type { MessageType, Message } from "@bufbuild/protobuf";
 
-invariant(window.env.GOMMERCE_GRPC_ENDPOINT, "environment variable GOMMERCE_GRPC_ENDPOINT is required.");
-
-declare global {
-    interface Window {
-        env: {
-            [key: string]: string | undefined;
-            GOMMERCE_GRPC_ENDPOINT: string;
-        };
-    }
-}
+invariant(import.meta.env.VITE_GRPC_ENDPOINT, "environment variable VITE_GRPC_ENDPOINT is required.");
 
 export async function fetchUnary<I extends Message<I>, O extends Message<O>>(
     req: Message<I>,
@@ -19,7 +10,7 @@ export async function fetchUnary<I extends Message<I>, O extends Message<O>>(
     mn: string,
     rs: AbortSignal | null = null,
 ): Promise<O> {
-    const resp = await fetch(`${window.env.GOMMERCE_GRPC_ENDPOINT}/${sn}/${mn}`, {
+    const resp = await fetch(`${import.meta.env.VITE_GRPC_ENDPOINT}/${sn}/${mn}`, {
         method: "POST",
         body: req.toJsonString(),
         headers: { "Content-Type": "application/json" },
@@ -36,7 +27,7 @@ export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
     rs: AbortSignal | null = null,
 ): AsyncGenerator<O> {
     try {
-        const resp = await fetch(`${window.env.GOMMERCE_GRPC_ENDPOINT}/${sn}/${mn}`, {
+        const resp = await fetch(`${import.meta.env.VITE_GRPC_ENDPOINT}/${sn}/${mn}`, {
             method: "POST",
             body: req.toJsonString(),
             headers: { "Content-Type": "application/json" },
