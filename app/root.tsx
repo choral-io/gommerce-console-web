@@ -14,6 +14,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const identity = await authorize(request);
     return {
         user: identity?.user,
+        token: identity?.token,
         scope: identity?.scope,
     };
 }

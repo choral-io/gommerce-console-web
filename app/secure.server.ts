@@ -43,7 +43,7 @@ export async function authorize(request: Request) {
         try {
             const { user, scope } = await users.getIdentity({}, { headers: { Authorization: `Bearer ${token}` } });
             if (user) {
-                return { user: user.toJson(), scope: scope || [] };
+                return { user: user.toJson(), token, scope: scope || [] };
             }
             console.error("unexpected error: user is not present in the response", {
                 user,

@@ -1,61 +1,34 @@
 import invariant from "tiny-invariant";
-import type { MessageType, Message } from "@bufbuild/protobuf";
+import { SnowflakeService, PasswordService, DateTimeService } from "@proto/utils/v1/utils_connect";
+import { StateStoreService } from "@proto/state/v1beta/store_connect";
+import { UsersService } from "@proto/iam/v1beta/users_connect";
+import { TokensService } from "@proto/iam/v1beta/tokens_connect";
+import { ChatsService } from "@proto/chats/v1beta/chats_connect";
+import { createRegistry } from "@bufbuild/protobuf";
+import { createGrpcGatewayTransport, createPromiseClient, googleRpcTypes } from "~/connect";
 
 invariant(import.meta.env.VITE_GRPC_ENDPOINT, "environment variable VITE_GRPC_ENDPOINT is required.");
 
-export async function fetchUnary<I extends Message<I>, O extends Message<O>>(
-    req: Message<I>,
-    mt: MessageType<O>,
-    sn: string,
-    mn: string,
-    rs: AbortSignal | null = null,
-): Promise<O> {
-    const resp = await fetch(`${import.meta.env.VITE_GRPC_ENDPOINT}/${sn}/${mn}`, {
-        method: "POST",
-        body: req.toJsonString(),
-        headers: { "Content-Type": "application/json" },
-        signal: rs,
-    });
-    return mt.fromJsonString(await resp.text());
-}
+const endpoint = import.meta.env.VITE_GRPC_ENDPOINT;
 
-export async function* fetchStream<I extends Message<I>, O extends Message<O>>(
-    req: Message<I>,
-    mt: MessageType<O>,
-    sn: string,
-    mn: string,
-    rs: AbortSignal | null = null,
-): AsyncGenerator<O> {
-    try {
-        const resp = await fetch(`${import.meta.env.VITE_GRPC_ENDPOINT}/${sn}/${mn}`, {
-            method: "POST",
-            body: req.toJsonString(),
-            headers: { "Content-Type": "application/json" },
-            signal: rs,
-        });
-        const decoder = new TextDecoder("utf-8");
-        const reader = resp.body?.getReader();
-        let buffer = "";
-        while (reader) {
-            const { done, value } = await reader.read();
-            if (value && value.length > 0) {
-                buffer += decoder.decode(value, { stream: true });
-            }
-            if (buffer.length > 0) {
-                const chunks = buffer.split(/\r?\n/);
-                buffer = chunks.pop() || "";
-                for (const chunk of chunks) {
-                    yield mt.fromJson(JSON.parse(chunk).result);
-                }
-            }
-            if (done) {
-                break;
-            }
-        }
-    } catch (err) {
-        if (err instanceof DOMException && err.name === "AbortError") {
-            return;
-        }
-        throw err;
-    }
-}
+export const transport = createGrpcGatewayTransport({
+    baseUrl: endpoint,
+    jsonOptions: {
+        typeRegistry: createRegistry(...googleRpcTypes),
+    },
+});
+
+// utils/v1
+export const snowflakeServiceClient = createPromiseClient(SnowflakeService, transport);
+export const passwordServiceClient = createPromiseClient(PasswordService, transport);
+export const dateTimeServiceClient = createPromiseClient(DateTimeService, transport);
+
+// state/v1beta
+export const stateStoreServiceClient = createPromiseClient(StateStoreService, transport);
+
+// iam/v1beta
+export const usersServiceClient = createPromiseClient(UsersService, transport);
+export const tokensServiceClient = createPromiseClient(TokensService, transport);
+
+// chats/v1beta
+export const chatsServiceClient = createPromiseClient(ChatsService, transport);

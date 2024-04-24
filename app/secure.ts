@@ -1,9 +1,10 @@
 import { User } from "@proto/iam/v1beta/users_pb";
 import type { loader } from "~/root";
-import { useMatchData } from "./utils/hooks";
+import { useMatchData } from "~/utils/hooks";
 
 export type Identity = {
     user: User | null;
+    token: string | null;
     scope: string[];
 };
 
@@ -12,9 +13,10 @@ export function useAuthorize(): Identity {
     if (routeData && routeData.user && routeData.scope) {
         return {
             user: User.fromJson(routeData.user),
+            token: routeData.token ?? null,
             scope: routeData.scope,
         };
     } else {
-        return { user: null, scope: [] };
+        return { user: null, token: null, scope: [] };
     }
 }
