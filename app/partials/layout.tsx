@@ -14,9 +14,9 @@ import {
 } from "@tabler/icons-react";
 import { useHandleData } from "~/utils/hooks";
 
-export type LayoutOptions = {
+export interface LayoutOptions {
     useSidebar?: boolean;
-};
+}
 
 export default function Frame(props: { context?: unknown }) {
     const { user } = useAuthorize();

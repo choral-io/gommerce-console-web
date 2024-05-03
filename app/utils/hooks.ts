@@ -20,5 +20,5 @@ export function useHandleData<H = unknown>(id: string | number) {
 }
 
 export function useMatchData<D = unknown>(id: string) {
-    return useUIMatch<D, unknown>(id)?.data;
+    return useUIMatch<D>(id)?.data;
 }

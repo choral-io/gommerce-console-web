@@ -1,3 +1,3 @@
-export { createPromiseClient, createCallbackClient } from "@connectrpc/connect";
-export * from "./grpc-gateway-transport";
+export { createCallbackClient, createPromiseClient } from "@connectrpc/connect";
 export * from "./google-rpc-types";
+export * from "./grpc-gateway-transport";

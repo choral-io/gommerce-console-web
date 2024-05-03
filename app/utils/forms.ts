@@ -3,13 +3,13 @@ import { ConnectError } from "@connectrpc/connect";
 import { BadRequest } from "@proto/rpc/error_details_pb";
 
 /** @type {import("zod").typeToFlattenedError<T, string>} */
-type validateError<T> = {
+interface validateError<T> {
     formErrors: string[];
     fieldErrors: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [P in T extends any ? keyof T : never]?: string[];
     };
-};
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseError<F = any>(error: ZodError<F> | ConnectError): validateError<F> | null {
@@ -19,7 +19,7 @@ export function parseError<F = any>(error: ZodError<F> | ConnectError): validate
     if (error instanceof ConnectError) {
         const result = { formErrors: [], fieldErrors: {} } as validateError<F>;
         const br = error.findDetails(BadRequest);
-        if (br && br.length > 0) {
+        if (br.length > 0) {
             return br[0].fieldViolations.reduce((acc, cur) => {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const field = cur.field as F extends any ? keyof F : never;

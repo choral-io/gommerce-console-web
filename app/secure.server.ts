@@ -5,19 +5,24 @@ import { ConnectError, Code } from "@connectrpc/connect";
 import { usersServiceClient as users, tokensServiceClient as tokens } from "~/clients/grpc.server";
 import { getSession, commitSession } from "~/session.server";
 
-invariant(process.env.GOMMERCE_AUTH_REALM, "environment variable GOMMERCE_AUTH_REALM is required.");
-invariant(process.env.REMIX_COOKIE_SECRET, "environment variable REMIX_COOKIE_SECRET is required.");
+invariant(typeof process.env.GOMMERCE_AUTH_REALM === "string", "environment variable GOMMERCE_AUTH_REALM is required.");
+invariant(typeof process.env.REMIX_COOKIE_SECRET === "string", "environment variable REMIX_COOKIE_SECRET is required.");
+invariant(typeof process.env.GOMMERCE_CLIENT_TOKEN === "string", "environment variable GOMMERCE_CLIENT_TOKEN is required.");
+
+const authRealm = process.env.GOMMERCE_AUTH_REALM;
+const cookieSecret = process.env.REMIX_COOKIE_SECRET;
+const clientToken = process.env.GOMMERCE_CLIENT_TOKEN;
 
 const __token__ = createCookie("__token__", {
     httpOnly: true,
     path: "/",
     sameSite: "lax",
-    secrets: [process.env.REMIX_COOKIE_SECRET],
+    secrets: [cookieSecret],
     secure: process.env.NODE_ENV === "production",
 });
 
 export async function getToken(request: Request) {
-    const cookie = await __token__.parse(request.headers.get("Cookie"));
+    const cookie = (await __token__.parse(request.headers.get("Cookie"))) as string | null;
     return typeof cookie === "string" ? cookie : null;
 }
 
@@ -26,7 +31,7 @@ export async function getIdentity(request: Request) {
     if (token) {
         const { user, scope } = await users.getIdentity({}, { headers: { Authorization: `Bearer ${token}` } });
         if (user) {
-            return { user: user.toJson(), scope: scope || [] };
+            return { user: user.toJson(), scope: scope };
         }
         console.error("unexpected error: user is not present in the response", {
             user,
@@ -43,7 +48,7 @@ export async function authorize(request: Request) {
         try {
             const { user, scope } = await users.getIdentity({}, { headers: { Authorization: `Bearer ${token}` } });
             if (user) {
-                return { user: user.toJson(), token, scope: scope || [] };
+                return { user: user.toJson(), token, scope: scope };
             }
             console.error("unexpected error: user is not present in the response", {
                 user,
@@ -71,14 +76,14 @@ export async function login(request: Request, redirectTo = "/") {
     const { username, password } = LoginForm.parse(Object.fromEntries(formData));
     const { accessToken, refreshToken, expiresIn } = await tokens.createToken(
         {
-            realm: process.env.GOMMERCE_AUTH_REALM,
+            realm: authRealm,
             provider: "FORM_PASSWORD",
             username,
             password,
         },
         {
             headers: {
-                Authorization: `Basic ${process.env.GOMMERCE_CLIENT_TOKEN}`,
+                Authorization: `Basic ${clientToken}`,
             },
         },
     );

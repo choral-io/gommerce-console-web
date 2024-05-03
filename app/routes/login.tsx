@@ -31,7 +31,7 @@ export default function Index() {
                 <Form method="post">
                     <p className="my-6 select-none text-center text-2xl font-semibold uppercase">Gommerce</p>
                     <ul className="list-inside list-disc text-error">
-                        {actionData?.formErrors?.map((m: string, k: number) => (
+                        {actionData?.formErrors.map((m: string, k: number) => (
                             <li key={k} title={m}>
                                 {m}
                             </li>

@@ -8,7 +8,7 @@ import { createGrpcTransport } from "@connectrpc/connect-node";
 import { createPromiseClient } from "@connectrpc/connect";
 import { singleton } from "~/singleton.server";
 
-invariant(process.env.GOMMERCE_GRPC_ENDPOINT, "environment variable GOMMERCE_GRPC_ENDPOINT is required.");
+invariant(typeof process.env.GOMMERCE_GRPC_ENDPOINT === "string", "environment variable GOMMERCE_GRPC_ENDPOINT is required.");
 
 const endpoint = process.env.GOMMERCE_GRPC_ENDPOINT;
 
