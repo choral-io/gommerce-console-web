@@ -1,5 +1,5 @@
 import { type UIMatch, useMatches } from "@remix-run/react";
-import { useMemo, useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
 
 export const useEnhancedEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -15,10 +15,12 @@ function useUIMatch<D = unknown, H = unknown>(id: string | number): UIMatch<D, H
     return uiMatch as UIMatch<D, H> | undefined;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function useHandleData<H = unknown>(id: string | number) {
     return useUIMatch<unknown, H>(id)?.handle;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
 export function useMatchData<D = unknown>(id: string) {
     return useUIMatch<D>(id)?.data;
 }

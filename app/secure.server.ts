@@ -1,13 +1,16 @@
+import { Code, ConnectError } from "@connectrpc/connect";
+import { createCookie, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import z from "zod";
-import { createCookie, redirect } from "@remix-run/node";
-import { ConnectError, Code } from "@connectrpc/connect";
-import { usersServiceClient as users, tokensServiceClient as tokens } from "~/clients/grpc.server";
-import { getSession, commitSession } from "~/session.server";
+import { tokensServiceClient as tokens, usersServiceClient as users } from "~/clients/grpc.server";
+import { commitSession, getSession } from "~/session.server";
 
 invariant(typeof process.env.GOMMERCE_AUTH_REALM === "string", "environment variable GOMMERCE_AUTH_REALM is required.");
 invariant(typeof process.env.REMIX_COOKIE_SECRET === "string", "environment variable REMIX_COOKIE_SECRET is required.");
-invariant(typeof process.env.GOMMERCE_CLIENT_TOKEN === "string", "environment variable GOMMERCE_CLIENT_TOKEN is required.");
+invariant(
+    typeof process.env.GOMMERCE_CLIENT_TOKEN === "string",
+    "environment variable GOMMERCE_CLIENT_TOKEN is required.",
+);
 
 const authRealm = process.env.GOMMERCE_AUTH_REALM;
 const cookieSecret = process.env.REMIX_COOKIE_SECRET;

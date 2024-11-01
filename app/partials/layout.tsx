@@ -1,17 +1,17 @@
-import { useEffect } from "react";
-import { Form, Link, NavLink, useLocation, Outlet } from "@remix-run/react";
-import { clsx } from "clsx";
-import { useAuthorize } from "~/secure";
+import { Form, Link, NavLink, Outlet, useLocation } from "@remix-run/react";
 import {
     IconChevronDown,
-    IconLogout,
+    IconHome,
+    IconLockAccess,
     IconLogin,
+    IconLogout,
+    IconShoppingCartCog,
     IconUser,
     IconUserScan,
-    IconShoppingCartCog,
-    IconLockAccess,
-    IconHome,
 } from "@tabler/icons-react";
+import { clsx } from "clsx";
+import { useEffect } from "react";
+import { useAuthorize } from "~/secure";
 import { useHandleData } from "~/utils/hooks";
 
 export interface LayoutOptions {

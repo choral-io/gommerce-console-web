@@ -1,18 +1,9 @@
-import { ZodError } from "zod";
 import { Code, ConnectError } from "@connectrpc/connect";
 import { BadRequest } from "@proto/rpc/error_details_pb";
-
-/** @type {import("zod").typeToFlattenedError<T, string>} */
-interface validateError<T> {
-    formErrors: string[];
-    fieldErrors: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        [P in T extends any ? keyof T : never]?: string[];
-    };
-}
+import { ZodError, type typeToFlattenedError } from "zod";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function parseError<F = any>(error: ZodError<F> | ConnectError): validateError<F> | null {
+export function parseError<F = any>(error: ZodError<F> | ConnectError): typeToFlattenedError<F> | null {
     if (error instanceof ZodError) {
         return error.flatten<string>();
     }
@@ -20,12 +11,12 @@ export function parseError<F = any>(error: ZodError<F> | ConnectError): validate
         if (error.code === Code.InvalidArgument) {
             // prettier-ignore
             const fieldErrors = error.findDetails(BadRequest).at(-1)?.fieldViolations.reduce((acc, cur) => {
-                    acc[cur.field] = [cur.description];
-                    return acc;
-                },
-                {} as Record<string, string[]>,
+                acc[cur.field] = [cur.description];
+                return acc;
+            },
+                { "": [] } as Record<string, string[]>,
             ) ?? {};
-            return { formErrors: [], fieldErrors };
+            return { formErrors: fieldErrors[""], fieldErrors };
         } else {
             return { formErrors: [error.message], fieldErrors: {} };
         }
