@@ -1,4 +1,6 @@
-import { User } from "@proto/iam/v1beta/users_pb";
+import { fromJson } from "@bufbuild/protobuf";
+import type { User } from "@gommerce/iam/v1beta/users_pb";
+import { UserSchema } from "@gommerce/iam/v1beta/users_pb";
 import type { loader } from "~/root";
 import { useMatchData } from "~/utils/hooks";
 
@@ -12,7 +14,7 @@ export function useAuthorize(): Identity {
     const routeData = useMatchData<typeof loader>("root");
     if (routeData && routeData.user && routeData.scope) {
         return {
-            user: User.fromJson(routeData.user),
+            user: fromJson(UserSchema, routeData.user),
             token: routeData.token ?? null,
             scope: routeData.scope,
         };

@@ -1,16 +1,15 @@
 import { Code, ConnectError } from "@connectrpc/connect";
-import { BadRequest } from "@proto/rpc/error_details_pb";
+import { BadRequestSchema } from "@google/rpc/error_details_pb";
 import { ZodError, type typeToFlattenedError } from "zod";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function parseError<F = any>(error: ZodError<F> | ConnectError): typeToFlattenedError<F> | null {
+export function handleError<T = unknown>(error: unknown): typeToFlattenedError<T> {
     if (error instanceof ZodError) {
-        return error.flatten<string>();
+        return (error as ZodError<T>).flatten<string>();
     }
     if (error instanceof ConnectError) {
         if (error.code === Code.InvalidArgument) {
             // prettier-ignore
-            const fieldErrors = error.findDetails(BadRequest).at(-1)?.fieldViolations.reduce((acc, cur) => {
+            const fieldErrors = error.findDetails(BadRequestSchema).at(-1)?.fieldViolations.reduce((acc, cur) => {
                 acc[cur.field] = [cur.description];
                 return acc;
             },
@@ -21,5 +20,5 @@ export function parseError<F = any>(error: ZodError<F> | ConnectError): typeToFl
             return { formErrors: [error.message], fieldErrors: {} };
         }
     }
-    return null;
+    throw error;
 }

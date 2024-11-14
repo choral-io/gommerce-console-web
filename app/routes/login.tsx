@@ -1,10 +1,8 @@
-import { ConnectError } from "@connectrpc/connect";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import clsx from "clsx";
-import { ZodError } from "zod";
 import { login, type LoginFormType } from "~/secure.server";
-import { parseError } from "~/utils/forms";
+import { handleError } from "~/utils/forms";
 
 export const meta: MetaFunction = ({ matches }) => {
     return [{ title: "Login" }];
@@ -14,10 +12,7 @@ export async function action({ request }: ActionFunctionArgs) {
     try {
         return await login(request);
     } catch (e) {
-        if (e instanceof ZodError || e instanceof ConnectError) {
-            return parseError<LoginFormType>(e);
-        }
-        throw new Error("Unknown error: " + e);
+        return handleError<LoginFormType>(e);
     }
 }
 

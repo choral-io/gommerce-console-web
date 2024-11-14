@@ -1,4 +1,6 @@
+import { toJson } from "@bufbuild/protobuf";
 import { Code, ConnectError } from "@connectrpc/connect";
+import { UserSchema } from "@gommerce/iam/v1beta/users_pb";
 import { createCookie, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import z from "zod";
@@ -34,7 +36,7 @@ export async function getIdentity(request: Request) {
     if (token) {
         const { user, scope } = await users.getIdentity({}, { headers: { Authorization: `Bearer ${token}` } });
         if (user) {
-            return { user: user.toJson(), scope: scope };
+            return { user: toJson(UserSchema, user), scope: scope };
         }
         console.error("unexpected error: user is not present in the response", {
             user,
@@ -51,7 +53,7 @@ export async function authorize(request: Request) {
         try {
             const { user, scope } = await users.getIdentity({}, { headers: { Authorization: `Bearer ${token}` } });
             if (user) {
-                return { user: user.toJson(), token, scope: scope };
+                return { user: toJson(UserSchema, user), token, scope: scope };
             }
             console.error("unexpected error: user is not present in the response", {
                 user,
