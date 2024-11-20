@@ -121,10 +121,8 @@ export default function Frame(props: { context?: unknown }) {
                             </ul>
                         </div>
                     </aside>
-                    <main className="md:ml-72">
-                        <div className="p-4">
-                            <Outlet />
-                        </div>
+                    <main className="p-4 md:ml-72">
+                        <Outlet />
                     </main>
                 </div>
             ) : (
