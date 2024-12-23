@@ -18,7 +18,7 @@ export interface LayoutOptions {
     useSidebar?: boolean;
 }
 
-export default function Frame(props: { context?: unknown }) {
+export default function Frame(_: { context?: unknown }) {
     const { user } = useAuthorize();
     const location = useLocation();
     const handleData = useHandleData<{ layout?: { useSidebar?: boolean } }>(-1);

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { login, type LoginFormType } from "~/secure.server";
 import { handleError } from "~/utils/forms";
 
-export const meta: MetaFunction = ({ matches }) => {
+export const meta: MetaFunction = () => {
     return [{ title: "Login" }];
 };
 

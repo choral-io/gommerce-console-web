@@ -61,8 +61,16 @@ export default ts.config(
             importPlugin.flatConfigs.recommended,
         ],
         rules: {
-            "@typescript-eslint/no-unused-vars": ["error", { caughtErrorsIgnorePattern: "^_" }],
             "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    argsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                },
+            ],
         },
         settings: {
             "import/internal-regex": "^~/",
