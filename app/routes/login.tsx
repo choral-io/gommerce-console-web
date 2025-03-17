@@ -22,57 +22,59 @@ export default function Index() {
     const actionData = useActionData<typeof action>();
     return (
         <>
-            <div className="mx-auto mt-16 max-w-md rounded-box border border-base-content/10 bg-base-100 px-12 py-6 shadow-2xl">
+            <div className="rounded-box border-base-content/10 bg-base-100 mx-auto mt-16 max-w-md border px-12 py-6 shadow-2xl">
                 <Form method="post">
-                    <p className="my-6 select-none text-center text-2xl font-semibold uppercase">Gommerce</p>
-                    <ul className="list-inside list-disc text-error">
+                    <p className="my-6 text-center text-2xl font-semibold uppercase">Gommerce</p>
+                    <ul className="text-error list-inside list-disc">
                         {actionData?.formErrors.map((m: string, k: number) => (
                             <li key={k} title={m}>
                                 {m}
                             </li>
                         ))}
                     </ul>
-                    <label className="form-control">
-                        <div className="label font-semibold">Username</div>
+                    <fieldset className="fieldset">
+                        <label className="fieldset-label" htmlFor="username">
+                            Username
+                        </label>
                         <input
                             type="text"
                             name="username"
                             id="username"
-                            className={clsx("input input-bordered", {
+                            className={clsx("input w-full", {
                                 "input-error": !!actionData?.fieldErrors.username,
                             })}
                             placeholder="Username"
                             autoComplete="username"
                         />
-                    </label>
-                    <ul className="list-inside list-disc text-error">
-                        {actionData?.fieldErrors.username?.map((m: string, k: number) => (
-                            <li key={k} title={m}>
-                                {m}
-                            </li>
-                        ))}
-                    </ul>
-                    <label className="form-control">
-                        <div className="label font-semibold">Password</div>
+                        <ul className="text-error list-inside list-disc">
+                            {actionData?.fieldErrors.username?.map((m: string, k: number) => (
+                                <li key={k} title={m}>
+                                    {m}
+                                </li>
+                            ))}
+                        </ul>
+                        <label className="fieldset-label" htmlFor="password">
+                            Password
+                        </label>
                         <input
                             type="password"
                             name="password"
                             id="password"
-                            className={clsx("input input-bordered", {
+                            className={clsx("input w-full", {
                                 "input-error": !!actionData?.fieldErrors.password,
                             })}
                             placeholder="Password"
-                            autoComplete="current-password"
+                            autoComplete="password"
                         />
-                    </label>
-                    <ul className="list-inside list-disc text-error">
-                        {actionData?.fieldErrors.password?.map((m: string, k: number) => (
-                            <li key={k} title={m}>
-                                {m}
-                            </li>
-                        ))}
-                    </ul>
-                    <button type="submit" className="btn btn-primary btn-block my-6" disabled={submitting}>
+                        <ul className="text-error list-inside list-disc">
+                            {actionData?.fieldErrors.password?.map((m: string, k: number) => (
+                                <li key={k} title={m}>
+                                    {m}
+                                </li>
+                            ))}
+                        </ul>
+                    </fieldset>
+                    <button type="submit" className="btn btn-primary btn-block my-6 uppercase" disabled={submitting}>
                         {submitting ? "Logging in..." : "Login"}
                     </button>
                 </Form>

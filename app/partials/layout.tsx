@@ -30,20 +30,20 @@ export default function Frame(_: { context?: unknown }) {
     }, [location]);
     return (
         <>
-            <div className="navbar sticky top-0 border-b border-base-content/5 bg-base-100 bg-opacity-75 backdrop-blur">
+            <div className="navbar bg-base-100 border-b-base-200 sticky top-0 border-b backdrop-blur">
                 <div className="navbar-start">
-                    <Link to="/" className="btn btn-ghost no-animation text-xl">
+                    <Link to="/" className="btn btn-ghost text-xl">
                         <span className="uppercase">Gommerce</span>
                     </Link>
                 </div>
                 <div className="navbar-center"></div>
                 <div className="navbar-end">
-                    <NavLink to={"/login"} className={clsx("btn btn-ghost no-animation", { hidden: !!user })}>
+                    <NavLink to={"/login"} className={clsx("btn btn-ghost", { hidden: !!user })}>
                         <IconLogin size="1em" />
                         Login
                     </NavLink>
                     <div id="user-dropdown" className={clsx("dropdown dropdown-end", { hidden: !user })}>
-                        <div tabIndex={0} role="button" className="btn btn-ghost no-animation">
+                        <div tabIndex={0} role="button" className="btn btn-ghost">
                             <IconUser size="1em" />
                             {user?.attributes["profile.display_name"] ?? "Anonymous"}
                             <IconChevronDown size="1em" />
@@ -51,7 +51,7 @@ export default function Frame(_: { context?: unknown }) {
                         <ul
                             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
                             tabIndex={0}
-                            className="menu dropdown-content w-52 rounded-box border border-base-content/5 bg-base-100 bg-opacity-95 shadow-2xl"
+                            className="menu dropdown-content rounded-box bg-base-100 dark:bg-base-300 bg-opacity-95 mt-4 w-52 shadow-md"
                         >
                             <li>
                                 <NavLink to={"/profile"}>
@@ -78,9 +78,9 @@ export default function Frame(_: { context?: unknown }) {
             </div>
             {handleData?.layout?.useSidebar !== false ? (
                 <div>
-                    <aside className="fixed bottom-0 top-16 hidden w-72 overflow-auto md:block">
+                    <aside className="fixed top-16 bottom-0 hidden w-72 overflow-auto md:block">
                         <div className="p-4">
-                            <ul className="menu w-full rounded-box">
+                            <ul className="menu rounded-box w-full">
                                 <li>
                                     <NavLink to="/" className="flex items-center gap-2">
                                         <IconHome size="1em" />
@@ -88,7 +88,7 @@ export default function Frame(_: { context?: unknown }) {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <span className="menu-title flex select-none items-center gap-2">
+                                    <span className="menu-title flex items-center gap-2 select-none">
                                         <IconUser size="1em" />
                                         User
                                     </span>
@@ -99,7 +99,7 @@ export default function Frame(_: { context?: unknown }) {
                                     </ul>
                                 </li>
                                 <li>
-                                    <span className="menu-title flex select-none items-center gap-2">
+                                    <span className="menu-title flex items-center gap-2 select-none">
                                         <IconLockAccess size="1em" />
                                         IAM
                                     </span>
@@ -113,7 +113,7 @@ export default function Frame(_: { context?: unknown }) {
                                     </ul>
                                 </li>
                                 <li>
-                                    <span className="menu-title flex select-none items-center gap-2">
+                                    <span className="menu-title flex items-center gap-2 select-none">
                                         <IconShoppingCartCog size="1em" /> SKU
                                     </span>
                                     <ul></ul>
