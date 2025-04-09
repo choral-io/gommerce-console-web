@@ -2,7 +2,7 @@ import type { SessionData, SessionIdStorageStrategy, SessionStorage } from "@rem
 import { createSessionStorage } from "@remix-run/node";
 import type { FlashSessionData } from "@remix-run/server-runtime";
 import invariant from "tiny-invariant";
-import { v4 as uuidv4 } from "uuid";
+import { v7 as uuidv7 } from "uuid";
 import { stateStoreServiceClient as stateStore } from "~/clients/grpc.server";
 
 invariant(
@@ -42,7 +42,7 @@ export function createStateSessionStorage<Data = SessionData, FlashData = Data>(
     return createSessionStorage<Data, FlashData>({
         cookie: options?.cookie,
         async createData(data, expires) {
-            const id = uuidv4();
+            const id = uuidv7();
             await upsert(id, JSON.stringify(data), expires);
             return id;
         },
