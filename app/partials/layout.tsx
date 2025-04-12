@@ -1,24 +1,49 @@
 import { Form, Link, NavLink, Outlet, useLocation } from "@remix-run/react";
-import {
-    IconChevronDown,
-    IconHome,
-    IconLockAccess,
-    IconLogin,
-    IconLogout,
-    IconShoppingCartCog,
-    IconUser,
-    IconUserScan,
-} from "@tabler/icons-react";
 import { clsx } from "clsx";
+import { createLucideIcon, LucideChevronDown, LucideHouse, LucideLogIn, LucideLogOut, LucideUser } from "lucide-react";
 import { useEffect } from "react";
 import { useAuthorize } from "~/secure";
 import { useHandleData } from "~/utils/hooks";
+
+// https://tabler.io/icons/icon/lock-access
+const LucideLockAccess = createLucideIcon("LockAccess", [
+    ["path", { d: "M4 8v-2a2 2 0 0 1 2 -2h2", key: "p1" }],
+    ["path", { d: "M4 16v2a2 2 0 0 0 2 2h2", key: "p2" }],
+    ["path", { d: "M16 4h2a2 2 0 0 1 2 2v2", key: "p3" }],
+    ["path", { d: "M16 20h2a2 2 0 0 0 2 -2v-2", key: "p4" }],
+    ["path", { d: "M8 11m0 1a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-6a1 1 0 0 1 -1 -1z", key: "p5" }],
+    ["path", { d: "M10 11v-2a2 2 0 1 1 4 0v2", key: "p6" }],
+]);
+
+// https://tabler.io/icons/icon/shopping-cart-cog
+const LucideShoppingCartCog = createLucideIcon("ShoppingCartCog", [
+    ["path", { d: "M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0", key: "p1" }],
+    ["path", { d: "M12 17h-6v-14h-2", key: "p2" }],
+    ["path", { d: "M6 5l14 1l-.79 5.526m-3.21 1.474h-10", key: "p3" }],
+    ["path", { d: "M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0", key: "p4" }],
+    ["path", { d: "M19.001 15.5v1.5", key: "p5" }],
+    ["path", { d: "M19.001 21v1.5", key: "p6" }],
+    ["path", { d: "M22.032 17.25l-1.299 .75", key: "p7" }],
+    ["path", { d: "M17.27 20l-1.3 .75", key: "p8" }],
+    ["path", { d: "M15.97 17.25l1.3 .75", key: "p9" }],
+    ["path", { d: "M20.733 20l1.3 .75", key: "p10" }],
+]);
+
+// https://tabler.io/icons/icon/user-scan
+const LucideUserScan = createLucideIcon("UserScan", [
+    ["path", { d: "M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0", key: "p1" }],
+    ["path", { d: "M4 8v-2a2 2 0 0 1 2 -2h2", key: "p2" }],
+    ["path", { d: "M4 16v2a2 2 0 0 0 2 2h2", key: "p3" }],
+    ["path", { d: "M16 4h2a2 2 0 0 1 2 2v2", key: "p4" }],
+    ["path", { d: "M16 20h2a2 2 0 0 0 2 -2v-2", key: "p5" }],
+    ["path", { d: "M8 16a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2", key: "p6" }],
+]);
 
 export interface LayoutOptions {
     useSidebar?: boolean;
 }
 
-export default function Frame(_: { context?: unknown }) {
+export default function Layout(_: { context?: unknown }) {
     const { user } = useAuthorize();
     const location = useLocation();
     const handleData = useHandleData<{ layout?: { useSidebar?: boolean } }>(-1);
@@ -39,14 +64,14 @@ export default function Frame(_: { context?: unknown }) {
                 <div className="navbar-center"></div>
                 <div className="navbar-end">
                     <NavLink to={"/login"} className={clsx("btn btn-ghost", { hidden: !!user })}>
-                        <IconLogin size="1em" />
+                        <LucideLogIn size="1em" />
                         Login
                     </NavLink>
                     <div id="user-dropdown" className={clsx("dropdown dropdown-end", { hidden: !user })}>
                         <div tabIndex={0} role="button" className="btn btn-ghost">
-                            <IconUser size="1em" />
+                            <LucideUser size="1em" />
                             {user?.attributes["profile.display_name"] ?? "Anonymous"}
-                            <IconChevronDown size="1em" />
+                            <LucideChevronDown size="1em" />
                         </div>
                         <ul
                             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
@@ -55,7 +80,7 @@ export default function Frame(_: { context?: unknown }) {
                         >
                             <li>
                                 <NavLink to={"/profile"}>
-                                    <IconUserScan size="1em" />
+                                    <LucideUserScan size="1em" />
                                     Profile
                                 </NavLink>
                             </li>
@@ -68,7 +93,7 @@ export default function Frame(_: { context?: unknown }) {
                                     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
                                     role="button"
                                 >
-                                    <IconLogout size="1em" />
+                                    <LucideLogOut size="1em" />
                                     Logout
                                 </label>
                             </li>
@@ -83,13 +108,13 @@ export default function Frame(_: { context?: unknown }) {
                             <ul className="menu rounded-box w-full">
                                 <li>
                                     <NavLink to="/" className="flex items-center gap-2">
-                                        <IconHome size="1em" />
+                                        <LucideHouse size="1em" />
                                         Home
                                     </NavLink>
                                 </li>
                                 <li>
                                     <span className="menu-title flex items-center gap-2 select-none">
-                                        <IconUser size="1em" />
+                                        <LucideUser size="1em" />
                                         User
                                     </span>
                                     <ul>
@@ -100,7 +125,7 @@ export default function Frame(_: { context?: unknown }) {
                                 </li>
                                 <li>
                                     <span className="menu-title flex items-center gap-2 select-none">
-                                        <IconLockAccess size="1em" />
+                                        <LucideLockAccess size="1em" />
                                         IAM
                                     </span>
                                     <ul>
@@ -114,7 +139,7 @@ export default function Frame(_: { context?: unknown }) {
                                 </li>
                                 <li>
                                     <span className="menu-title flex items-center gap-2 select-none">
-                                        <IconShoppingCartCog size="1em" /> SKU
+                                        <LucideShoppingCartCog size="1em" /> SKU
                                     </span>
                                     <ul></ul>
                                 </li>
