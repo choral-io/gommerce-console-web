@@ -6,6 +6,7 @@ import { useAuthorize } from "~/secure";
 import { useHandleData } from "~/utils/hooks";
 
 // https://tabler.io/icons/icon/lock-access
+// MIT License: https://github.com/tabler/tabler-icons/blob/main/LICENSE
 const LucideLockAccess = createLucideIcon("LockAccess", [
     ["path", { d: "M4 8v-2a2 2 0 0 1 2 -2h2", key: "p1" }],
     ["path", { d: "M4 16v2a2 2 0 0 0 2 2h2", key: "p2" }],
@@ -16,6 +17,7 @@ const LucideLockAccess = createLucideIcon("LockAccess", [
 ]);
 
 // https://tabler.io/icons/icon/shopping-cart-cog
+// MIT License: https://github.com/tabler/tabler-icons/blob/main/LICENSE
 const LucideShoppingCartCog = createLucideIcon("ShoppingCartCog", [
     ["path", { d: "M4 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0", key: "p1" }],
     ["path", { d: "M12 17h-6v-14h-2", key: "p2" }],
@@ -30,6 +32,7 @@ const LucideShoppingCartCog = createLucideIcon("ShoppingCartCog", [
 ]);
 
 // https://tabler.io/icons/icon/user-scan
+// MIT License: https://github.com/tabler/tabler-icons/blob/main/LICENSE
 const LucideUserScan = createLucideIcon("UserScan", [
     ["path", { d: "M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0", key: "p1" }],
     ["path", { d: "M4 8v-2a2 2 0 0 1 2 -2h2", key: "p2" }],
