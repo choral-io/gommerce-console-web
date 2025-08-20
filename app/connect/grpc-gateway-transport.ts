@@ -1,4 +1,4 @@
-// https://github.com/connectrpc/connect-es/blob/v2.0.0/packages/connect-web/src/grpc-web-transport.ts
+// https://github.com/connectrpc/connect-es/blob/v2.0.4/packages/connect-web/src/grpc-web-transport.ts
 
 import type {
     DescMessage,
@@ -28,7 +28,9 @@ import {
     runStreamingCall,
     runUnaryCall,
 } from "@connectrpc/connect/protocol";
-import { contentTypeJson, headerContentType, headerTimeout } from "@connectrpc/connect/protocol-grpc";
+import { headerContentType, headerTimeout } from "@connectrpc/connect/protocol-grpc";
+
+const contentTypeJson = "application/json";
 
 export interface GrpcGatewayTransportOptions {
     baseUrl: string;
@@ -75,7 +77,7 @@ export function createGrpcGatewayTransport(options: GrpcGatewayTransportOptions)
                         method: req.requestMethod,
                         headers: req.header,
                         signal: req.signal,
-                        body: serialize(req.message),
+                        body: toArrayBuffer(serialize(req.message)),
                     });
                     if (!response.body) {
                         throw new Error("missing response body");
@@ -141,7 +143,7 @@ export function createGrpcGatewayTransport(options: GrpcGatewayTransportOptions)
                         method: req.requestMethod,
                         headers: req.header,
                         signal: req.signal,
-                        body: serialize(result.value),
+                        body: toArrayBuffer(serialize(result.value)),
                     });
                     if (!response.body) {
                         throw new Error("missing response body");
@@ -246,6 +248,19 @@ function errorFromJsonBytes(
         throw fallback;
     }
     return errorFromJsonValue(value, metadata, fallback, options);
+}
+
+function toArrayBuffer(data: Uint8Array): ArrayBuffer {
+    const { buffer, byteOffset: offset, byteLength: length } = data;
+    if (buffer instanceof ArrayBuffer) {
+        if (offset === 0 && length === buffer.byteLength) {
+            return buffer;
+        }
+        return buffer.slice(offset, offset + length);
+    }
+    const clone = new Uint8Array(data.byteLength);
+    clone.set(data);
+    return clone.buffer;
 }
 
 async function* readAsyncIterable<O extends DescMessage>(

@@ -64,7 +64,6 @@ export default function Index() {
                                 "input-error": !!actionData?.fieldErrors.password,
                             })}
                             placeholder="Password"
-                            autoComplete="password"
                         />
                         <ul className="text-error list-inside list-disc">
                             {actionData?.fieldErrors.password?.map((m: string, k: number) => (
